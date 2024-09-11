@@ -1,45 +1,62 @@
-const getState = ({ getStore, getActions, setStore }) => {
-	return {
-		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
-		},
-		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+const getState = ({ getStore, setStore }) => {
+    return {
+        store: {
+            categories: [],
+            items: [],
+            currentCategory: null,
+            selectedItem: null
+        },
+        actions: {
+            fetchCategories: async () => {
+                const store = getStore();
+                if (store.categories.length === 0) {
+                    try {
+                        const response = await fetch("https://www.swapi.tech/api/");
+                        const data = await response.json();
+                        const categories = Object.keys(data.result);
+                        setStore({ categories });
+                    } catch (error) {
+                        console.error("Error fetching categories:", error);
+                    }
+                }
+            },
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+            fetchCategoryItems: async (category) => {
+                console.log(category);
+                
+                const store = getStore();
+                if (store.currentCategory !== category) {
+                    try {
+                        const response = await fetch(`https://www.swapi.tech/api/${category}`);
+                        if (!response.ok) {
+                            throw new Error(`Error fetching ${category} items`);
+                        }
+                        const data = await response.json();
+                        setStore({ items: data.result, currentCategory: category });
+                    } catch (error) {
+                        console.error(`Error fetching items for category ${category}:`, error);
+                    }
+                }
+            },
 
-				//reset the global store
-				setStore({ demo: demo });
-			}
-		}
-	};
+            fetchItemDetails: async (category, id) => {
+                try {
+                    const response = await fetch(`https://www.swapi.tech/api/${category}/${id}`);
+                    if (!response.ok) {
+                        throw new Error(`Error fetching item details: ${response.status} ${response.statusText}`);
+                    }
+                    const data = await response.json();
+                    setStore({ selectedItem: data.result.properties });
+                } catch (error) {
+                    console.error("Error fetching item details:", error);
+                }
+            },
+
+            clearSelectedItem: () => {
+                setStore({ selectedItem: null });
+            }
+        }
+    };
 };
 
 export default getState;
