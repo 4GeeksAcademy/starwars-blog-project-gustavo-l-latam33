@@ -4,7 +4,9 @@ const getState = ({ getStore, setStore }) => {
             categories: [],
             items: [],
             currentCategory: null,
-            selectedItem: null
+            selectedItem: null,
+            nextPage: null,
+            previousPage: null,
         },
         actions: {
             fetchCategories: async () => {
@@ -21,18 +23,24 @@ const getState = ({ getStore, setStore }) => {
                 }
             },
 
-            fetchCategoryItems: async (category) => {
-                console.log(category);
-                
+            fetchCategoryItems: async (category, page = 1) => {
                 const store = getStore();
-                if (store.currentCategory !== category) {
+                if (store.currentCategory !== category || store.items.length === 0) {
                     try {
-                        const response = await fetch(`https://www.swapi.tech/api/${category}`);
-                        if (!response.ok) {
-                            throw new Error(`Error fetching ${category} items`);
-                        }
+                        const response = await fetch(`https://www.swapi.tech/api/${category}?page=${page}&limit=10`);
+                        if (!response.ok) throw new Error(`Error fetching ${category} items`);
                         const data = await response.json();
-                        setStore({ items: data.result, currentCategory: category });
+
+                        // Para manejar tanto `result` como `results`
+                        const items = data.result || data.results || [];
+                        if (items.length === 0) throw new Error(`No items found for category: ${category}`);
+
+                        setStore({
+                            items,
+                            currentCategory: category,
+                            nextPage: data.next,
+                            previousPage: data.previous
+                        });
                     } catch (error) {
                         console.error(`Error fetching items for category ${category}:`, error);
                     }
@@ -42,9 +50,7 @@ const getState = ({ getStore, setStore }) => {
             fetchItemDetails: async (category, id) => {
                 try {
                     const response = await fetch(`https://www.swapi.tech/api/${category}/${id}`);
-                    if (!response.ok) {
-                        throw new Error(`Error fetching item details: ${response.status} ${response.statusText}`);
-                    }
+                    if (!response.ok) throw new Error(`Error fetching item details`);
                     const data = await response.json();
                     setStore({ selectedItem: data.result.properties });
                 } catch (error) {

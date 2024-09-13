@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Card } from "../component/card";
@@ -8,28 +8,25 @@ export const Category = () => {
     const { category } = useParams();
 
     useEffect(() => {
-        if (store.currentCategory !== category) {
-            actions.fetchCategoryItems(category);
-        }
-    }, [category, actions, store.currentCategory]);
-
-    if (!store.items || store.items.length === 0) {
-        return <p>Loading items...</p>;
-    }
+        actions.fetchCategoryItems(category);
+    }, [category, actions]);
 
     return (
-        <div>
-            <h1>{category.charAt(0).toUpperCase() + category.slice(1)} List</h1>
-            <div className="card-grid">
-                {store.items.map((item, index) => (
-                    <Card
-                        key={index}
-                        name={item.name}
-                        uid={item.uid}
-                        category={category}
-                        onClick={() => actions.fetchItemDetails(category, item.uid)}
-                    />
-                ))}
+        <div className="category-page">
+            <h2>{category}</h2>
+            <div className="card-container">
+                {store.items.length > 0 ? (
+                    store.items.map(item => (
+                        <Card
+                            key={item.uid}
+                            uid={item.uid}
+                            category={category}
+                            onClick={() => actions.fetchItemDetails(category, item.uid)}
+                        />
+                    ))
+                ) : (
+                    <p>No items found for this category.</p>
+                )}
             </div>
         </div>
     );
