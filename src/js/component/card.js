@@ -1,13 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Styles from "../../styles/card.css"
 
-export const Card = ({ uid, category, onClick }) => {
-    const imageUrl = `https://starwars-visualguide.com/assets/img/${category === 'people' ? 'characters' : category}/${uid}.jpg`;
+export const Card = ({ uid, category, name, title, imageUrl, onClick }) => {
+    const defaultImageUrl = imageUrl || `https://starwars-visualguide.com/assets/img/${category === 'people' ? 'characters' : category}/${uid}.jpg`;
+    const placeholderUrl = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+    const displayName = category === "films" ? title : name;
+    const handleImageError = (e) => {
+        e.target.src = placeholderUrl;
+    };
 
     return (
         <div className="card" onClick={onClick}>
-            <img src={imageUrl} alt={`${category} ${uid}`} />
-            <p>{uid}</p>
+            <img 
+                src={defaultImageUrl} 
+                alt={`${displayName}`} 
+                onError={handleImageError}
+            />
+            <p>{displayName}</p>
         </div>
     );
 };
@@ -15,5 +25,8 @@ export const Card = ({ uid, category, onClick }) => {
 Card.propTypes = {
     uid: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    name: PropTypes.string, 
+    title: PropTypes.string, 
+    imageUrl: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
 };

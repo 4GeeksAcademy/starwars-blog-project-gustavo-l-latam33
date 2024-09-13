@@ -39,3 +39,10 @@
 .card .btn:hover {
     background-color: #3498db;
 }
+
+.card-container {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

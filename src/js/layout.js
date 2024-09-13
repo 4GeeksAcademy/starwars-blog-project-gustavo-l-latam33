@@ -5,8 +5,12 @@ import { Category } from "./views/category";
 import { Sidebar } from "./component/sidebar";
 import { Modal } from "./component/modal";
 import injectContext, { Context } from "./store/appContext";
+import Style from "../styles/global.css"
+
 
 const Layout = () => {
+    const {  } = useContext(Context);
+    
     return (
         <Router>
             <div className="layout">
