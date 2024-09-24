@@ -1,0 +1,106 @@
+/* General Layout */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #0b0c10; /* Fondo oscuro */
+    color: #c5c6c7; /* Letras claras */
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100%;
+}
+
+.navbar {
+    grid-column: 1 / span 2; /* Hacer que ocupe todo el ancho */
+    background-color: #170321;
+    color: #66fcf1; /* Color claro para las letras */
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: #66fcf1;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.sidebar {
+    background-color: #170321;
+    padding: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: #c5c6c7;
+    padding: 10px 0;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    color: #fcca03;
+    transition: color 0.3s;
+}
+
+.content {
+    width: 100%;
+    background-color: #0b0c10;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Cards */
+.card {
+    background-color: #170321;
+    color: #c5c6c7;
+    border: 1px solid #45a29e;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Button styles */
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: #fcca03;
+    color: #0b0c10;
+    border: 2px solid #fcca03;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+button:hover {
+    background-color: #0b0c10;
+    color: #fcca03;
+    border-color: #fcca03;
+}
+
+/* Active button for favorites */
+button.favorite-active {
+    background-color: transparent;
+    color: #fcca03;
+    border-color: #fcca03;
+}

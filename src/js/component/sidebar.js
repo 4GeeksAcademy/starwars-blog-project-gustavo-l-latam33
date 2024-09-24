@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-import Styles from "../../styles/sidebar.css"
 
 export const Sidebar = () => {
     const { store, actions } = useContext(Context);

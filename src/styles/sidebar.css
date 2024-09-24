@@ -11,17 +11,18 @@
     color: #ecf0f1;
 }
 
-.sidebar ul {
+.sidebar > ul {
     list-style-type: none;
     padding: 0;
 }
 
-.sidebar ul li {
+.sidebar > ul li {
     margin: 15px 0;
+    list-style: none;
 }
 
 .sidebar ul li a {
-    color: #ecf0f1;
+    color: #fcca03;
     text-decoration: none;
 }
 

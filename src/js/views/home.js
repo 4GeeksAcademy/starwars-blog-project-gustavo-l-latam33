@@ -1,9 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Card } from "../component/card";
-import Style from "../../styles/home.css"
-
+import Style from "../../styles/home.css";
 
 export const Home = () => {
     const { store, actions } = useContext(Context);
@@ -31,9 +30,10 @@ export const Home = () => {
                             <Card
                                 uid={category}
                                 category={category}
-                                name={category} 
+                                name={category === "films" ? "Film Category" : category}  
+                                title={category === "films" ? "Star Wars Films" : null} 
                                 imageUrl={categoryImages[category]}
-                                onClick={() => {}} 
+                                onClick={() => { }}
                             />
                         </Link>
                     ))

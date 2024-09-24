@@ -13,19 +13,20 @@
     margin-top: 0;
 }
 
-.side-menu ul {
+.side-menu > ul {
     list-style-type: none;
     padding: 0;
 }
 
-.side-menu ul li {
+.sidebar > ul > li {
     cursor: pointer;
     padding: 10px;
     border-bottom: 1px solid #444;
+    list-style: none;
 }
 
-.side-menu ul li:hover {
-    background-color: #444;
+.sidebar > ul > li:hover {
+    color: #fcca03;
 }
 
 .content {

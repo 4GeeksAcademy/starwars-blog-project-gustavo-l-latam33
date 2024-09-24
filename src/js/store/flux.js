@@ -4,7 +4,9 @@ const getState = ({ getStore, setStore }) => {
             categories: [],
             items: [],
             currentCategory: null,
-            selectedItem: null
+            selectedItem: null,
+            favorites: [],
+            searchResults: []
         },
         actions: {
             fetchCategories: async () => {
@@ -25,7 +27,7 @@ const getState = ({ getStore, setStore }) => {
                 const store = getStore();
                 if (store.currentCategory !== category) {
                     try {
-                        const response = await fetch(`https://www.swapi.tech/api/${category}`);
+                        const response = await fetch(`https://www.swapi.tech/api/${category}/?page=1&limit=100`);
                         if (!response.ok) {
                             throw new Error(`Error fetching ${category} items`);
                         }
@@ -63,8 +65,53 @@ const getState = ({ getStore, setStore }) => {
                 }
             },
 
+            fetchSearchResults: async (query) => {
+                try {
+                    const peopleResponse = await fetch(`https://www.swapi.tech/api/people/?name=${query}`);
+                    const peopleData = await peopleResponse.json();
+
+                    const planetResponse = await fetch(`https://www.swapi.tech/api/planets/?name=${query}`);
+                    const planetData = await planetResponse.json();
+
+                    const vehicleResponse = await fetch(`https://www.swapi.tech/api/vehicles/?name=${query}`);
+                    const vehicleData = await vehicleResponse.json();
+
+                    const results = [
+                        ...peopleData.results || [],
+                        ...planetData.results || [],
+                        ...vehicleData.results || []
+                    ];
+
+                    setStore({ searchResults: results });
+                    return results;
+                } catch (error) {
+                    console.error("Error en la búsqueda:", error);
+                    return [];
+                }
+            },
+
             clearSelectedItem: () => {
                 setStore({ selectedItem: null });
+            },
+
+            addToFavorites: (item, category) => {
+                const store = getStore();
+                const newItem = {
+                    ...item,
+                    name: category === "films" ? item.title : item.name,
+                    category: category, 
+                };
+                
+                if (!store.favorites.find((fav) => fav.uid === newItem.uid)) {
+                    setStore({ favorites: [...store.favorites, newItem] });
+                }
+            },            
+
+            removeFromFavorites: (uid) => {
+                const store = getStore();
+                setStore({
+                    favorites: store.favorites.filter(fav => fav.uid !== uid)
+                });
             }
         }
     };
